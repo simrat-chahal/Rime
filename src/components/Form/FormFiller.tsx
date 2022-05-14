@@ -108,7 +108,6 @@ export default function FormFiller() {
   return (
     <>
       <Box sx={{ display: "flex", justifyContent: "center" }}>
-        <AddNewUserButton />
         <Modal
           id="userAddModal"
           aria-labelledby="transition-modal-title"
