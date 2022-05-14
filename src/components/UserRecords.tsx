@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect, useEffect } from "react";
+import React, { useEffect } from "react";
 
 //mui imports
 import Paper from "@mui/material/Paper";
@@ -7,7 +7,6 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
-import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import ThreeDotsMenu from "./ThreeDotsMenu";
 
@@ -50,7 +49,6 @@ interface Data {
 }
 
 const UserRecords: React.FC = (): JSX.Element => {
-  const [counter, setCounter] = useState(0);
   const { userList, selectedUserData } = useSelector(
     (state: any) => state.usersInfo
   );
@@ -105,15 +103,6 @@ const UserRecords: React.FC = (): JSX.Element => {
           </TableBody>
         </Table>
       </TableContainer>
-      {/* <TablePagination
-        rowsPerPageOptions={[10, 25, 100]}
-        component="div"
-        count={rows.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      /> */}
     </Paper>
   );
 };
