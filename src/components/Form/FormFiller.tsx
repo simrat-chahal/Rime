@@ -14,11 +14,14 @@ import {
 } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/lab";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
-import { formStyling } from "../styles/customMuiStylingObjects";
+import { formStyling } from "../../styles/customMuiStylingObjects";
 
 //redux-imports
 import { useSelector, useDispatch } from "react-redux";
-import { addUserData } from "../Redux/reducers/usersInfoSlice";
+import { addUserData } from "../../Redux/reducers/usersInfoSlice";
+import CountrySelect from "./CountrySelection";
+import PersonName from "./PersonName";
+import PersonAge from "./PersonAge";
 
 type errorStatusTypes = {
   name: string;
@@ -143,60 +146,17 @@ export default function FormFiller() {
                     justifyContent: "center",
                   }}
                 >
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "flex-end",
-                    }}
-                  >
-                    <Box
-                      component="span"
-                      sx={{
-                        color: "#d32f2f",
-                        visibility: errorStatus.name ? "initial" : "hidden",
-                      }}
-                    >
-                      {errorStatus.name ? errorStatus.name : "No Error"}
-                    </Box>
-                  </Box>
-                  <TextField
-                    id="outlined-basic"
-                    label="Name"
-                    name="userName"
-                    variant="outlined"
-                    margin="normal"
-                    value={data.name}
-                    error={errorStatus.name ? true : false}
-                    onChange={(e: any) => multiInputHandler(e)}
-                    sx={{ marginTop: "0px", marginBottom: "10px" }}
+                  <PersonName
+                    data={data}
+                    errorStatus={errorStatus}
+                    multiInputHandler={multiInputHandler}
                   />
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "flex-end",
-                    }}
-                  >
-                    <Box
-                      component="span"
-                      sx={{
-                        color: "#d32f2f",
-                        visibility: errorStatus.age ? "initial" : "hidden",
-                      }}
-                    >
-                      {errorStatus.age ? errorStatus.age : "No Error"}
-                    </Box>
-                  </Box>
-                  <TextField
-                    id="outlined-basic"
-                    name="age"
-                    label="Age"
-                    variant="outlined"
-                    margin="normal"
-                    value={data.age}
-                    error={errorStatus.age ? true : false}
-                    onChange={(e: any) => multiInputHandler(e)}
-                    sx={{ marginTop: "0px", marginBottom: "10px" }}
+                  <PersonAge
+                    data={data}
+                    errorStatus={errorStatus}
+                    multiInputHandler={multiInputHandler}
                   />
+                  <CountrySelect />
                   {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <DatePicker
                       value={data.date}
@@ -204,10 +164,10 @@ export default function FormFiller() {
                       renderInput={(params) => <TextField {...params} />}
                     />
                   </LocalizationProvider> */}
-                  <Button type="submit" variant="contained" color="primary">
+                   <Button type="submit" variant="contained" color="primary">
                     Submit
                   </Button>
-                  <input
+                  {/*<input
                     onKeyDown={(e) => console.log(e)}
                     onKeyPress={(e) => console.log(e)}
                   />
@@ -227,7 +187,7 @@ export default function FormFiller() {
                     name="fav_language"
                     value="JavaScript"
                   />
-                  <label htmlFor="javascript">JavaScript</label>
+                  <label htmlFor="javascript">JavaScript</label> */}
                   {/*<input type="color" id="favcolor" name="favcolor" value={colorValue} onBlur={(e)=>{setColorValue(e.target.value);console.log(e)}} />
                   <input type="reset" /> */}
                 </form>
