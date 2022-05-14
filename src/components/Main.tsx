@@ -1,6 +1,6 @@
 import UserRecords from "./UserRecords";
 import UserDetails from "./UserDetails";
-import FormFiller from "./FormFiller";
+import FormFiller from "./Form/FormFiller";
 import { Box, Alert } from "@mui/material";
 
 //redux imports
