@@ -16,6 +16,9 @@ const Main = () => {
             <UserRecords />
             <UserDetails />
           </Box>
+          <Box style={{ display: "flex", justifyContent: "center" }}>
+            <AddNewUserButton />
+          </Box>
         </>
       ) : (
         <Box
