@@ -15,16 +15,15 @@ const Main = () => {
             <UserRecords />
             <UserDetails />
           </Box>
-          <FormFiller />
         </>
       ) : (
         <Box className="center-element" mb={2} height='100vh' sx={{backgroundColor:'#a6ab7f'}}>
           <Alert variant="filled" severity="info" sx={{marginBottom: '14px'}}>
             Sorry! No Data is found.
           </Alert>
-          <FormFiller />
         </Box>
       )}
+      <FormFiller />
     </>
   );
 };

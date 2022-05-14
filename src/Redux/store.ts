@@ -1,8 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
-import usersInfoReducer from './reducers/usersInfoSlice'
+import usersInfoSlice from './reducers/usersInfoSlice'
+import muiModalsSlice from './reducers/muiModalsSlice';
 
 export default configureStore({
   reducer: {
-    usersInfo: usersInfoReducer,
+    usersInfo: usersInfoSlice,
+    muiModals: muiModalsSlice
   },
 });

@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 //material-ui imports
 import {
-  TextField,
   Typography,
   Snackbar,
   Alert,
@@ -19,6 +18,7 @@ import { formStyling } from "../../styles/customMuiStylingObjects";
 //redux-imports
 import { useSelector, useDispatch } from "react-redux";
 import { addUserData } from "../../Redux/reducers/usersInfoSlice";
+import { updateModalStatus } from "../../Redux/reducers/muiModalsSlice";
 import CountrySelect from "./CountrySelection";
 import PersonName from "./PersonName";
 import PersonAge from "./PersonAge";
@@ -29,20 +29,17 @@ type errorStatusTypes = {
 };
 
 export default function FormFiller() {
-  console.log("component is rendered");
-  // const { usersList } = useSelector(state=>state.usersInfo)
   const dispatch = useDispatch();
-  const [open, setOpen] = useState(false as boolean);
-  const [colorValue, setColorValue] = useState("" as string);
-  const handleOpen = () => setOpen(true as boolean);
-  const handleClose = () => {
-    setOpen(false as boolean);
-    setErrorStatus({
-      name: "",
-      age: "",
-    });
+  const { userAddModal } = useSelector((state: any) => state.muiModals);
+  
+  useEffect(() => {
+    !userAddModal &&
+      setErrorStatus({
+        name: "",
+        age: "",
+      });
     setData({ name: "", age: "", date: "" });
-  };
+  }, [userAddModal]);
 
   const [data, setData] = useState({ name: "", age: "", date: "" });
   const [errorStatus, setErrorStatus] = useState({
@@ -99,33 +96,36 @@ export default function FormFiller() {
 
   const submitHandler = (e: any) => {
     e.preventDefault();
-    console.log("hkh");
     if (formValidator()) {
       dispatch(addUserData(data));
       setSnackbarOpen(true);
       setData({ name: "", age: "", date: "" });
-      handleClose();
+      dispatch(updateModalStatus("userAddModal"));
     }
   };
 
   return (
     <>
       <Box sx={{ display: "flex", justifyContent: "center" }}>
-        <Button variant="outlined" onClick={handleOpen}>
+        <Button
+          variant="outlined"
+          onClick={() => dispatch(updateModalStatus("userAddModal"))}
+        >
           Add New User
         </Button>
         <Modal
+          id="userAddModal"
           aria-labelledby="transition-modal-title"
           aria-describedby="transition-modal-description"
-          open={open}
-          onClose={handleClose}
+          open={userAddModal}
+          onClose={() => dispatch(updateModalStatus("userAddModal"))}
           closeAfterTransition
           BackdropComponent={Backdrop}
           BackdropProps={{
             timeout: 500,
           }}
         >
-          <Fade in={open}>
+          <Fade in={userAddModal}>
             <Box sx={{ display: "flex", justifyContent: "center" }}>
               <Box sx={formStyling}>
                 <Typography
@@ -164,7 +164,7 @@ export default function FormFiller() {
                       renderInput={(params) => <TextField {...params} />}
                     />
                   </LocalizationProvider> */}
-                   <Button type="submit" variant="contained" color="primary">
+                  <Button type="submit" variant="contained" color="primary">
                     Submit
                   </Button>
                   {/*<input
