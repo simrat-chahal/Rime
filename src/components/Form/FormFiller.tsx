@@ -22,6 +22,7 @@ import { updateModalStatus } from "../../Redux/reducers/muiModalsSlice";
 import CountrySelect from "./CountrySelection";
 import PersonName from "./PersonName";
 import PersonAge from "./PersonAge";
+import AddNewUserButton from "./AddNewUserButton";
 
 type errorStatusTypes = {
   name: string;
@@ -107,12 +108,7 @@ export default function FormFiller() {
   return (
     <>
       <Box sx={{ display: "flex", justifyContent: "center" }}>
-        <Button
-          variant="outlined"
-          onClick={() => dispatch(updateModalStatus("userAddModal"))}
-        >
-          Add New User
-        </Button>
+        <AddNewUserButton />
         <Modal
           id="userAddModal"
           aria-labelledby="transition-modal-title"

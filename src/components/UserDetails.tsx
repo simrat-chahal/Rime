@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from "react";
 import { List, ListItem, ListItemText, Typography } from "@mui/material";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 //mui imports
-import { CircularProgress, Box } from "@mui/material";
+import { Box } from "@mui/material";
 
 export default function UserDetails() {
-  const { selectedUserData, userList } = useSelector(
+  const { selectedUserData } = useSelector(
     (state: any) => state.usersInfo
   );
   return (

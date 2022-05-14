@@ -4,8 +4,8 @@ export const slice = createSlice({
   name: 'usersInfo',
   initialState: {
     value: 0,
-    // userList: [],
-    userList: [{name:"rohit",age:"23",date:""},{name:"Elex",age:"14",date:""}],
+    userList: [],
+    // userList: [{name:"rohit",age:"23",date:""},{name:"Elex",age:"14",date:""}],
     selectedUserData: null
   },
   reducers: {
