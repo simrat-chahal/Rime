@@ -14,6 +14,7 @@ import ThreeDotsMenu from "./ThreeDotsMenu";
 import { useSelector, useDispatch } from "react-redux";
 //redux actions
 import { saveCurrentUserData } from "../Redux/reducers/usersInfoSlice";
+import { RootState } from "../Redux/store";
 
 interface Column {
   id: string;
@@ -50,7 +51,7 @@ interface Data {
 
 const UserRecords: React.FC = (): JSX.Element => {
   const { userList, selectedUserData } = useSelector(
-    (state: any) => state.usersInfo
+    (state: RootState) => state.usersInfo
   );
   const dispatch = useDispatch();
 

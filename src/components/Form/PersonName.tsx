@@ -26,6 +26,7 @@ const PersonName = ({errorStatus, data, multiInputHandler}:any) => {
         name="userName"
         variant="outlined"
         margin="normal"
+        autoFocus={true}
         value={data.name}
         error={errorStatus.name ? true : false}
         onChange={(e: any) => multiInputHandler(e)}

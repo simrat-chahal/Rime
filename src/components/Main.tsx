@@ -2,12 +2,18 @@ import UserRecords from "./UserRecords";
 import UserDetails from "./UserDetails";
 import FormFiller from "./Form/FormFiller";
 import { Box, Alert } from "@mui/material";
+import { addNewUserAPI } from "../apis/apisList";
+// console.log(UserRecords)
 
 //redux imports
 import { useSelector } from "react-redux";
 import AddNewUserButton from "./Form/AddNewUserButton";
+import { RootState } from "../Redux/store";
+import { useEffect } from "react";
 const Main = () => {
-  const { userList } = useSelector((state: any) => state.usersInfo);
+
+  const { userList } = useSelector((state: RootState) => state.usersInfo);
+  console.log(Box)
   return (
     <>
       {userList.length ? (

@@ -23,6 +23,8 @@ import CountrySelect from "./CountrySelection";
 import PersonName from "./PersonName";
 import PersonAge from "./PersonAge";
 import AddNewUserButton from "./AddNewUserButton";
+import { RootState } from "../../Redux/store";
+import { addNewUserAPI } from "../../apis/apisList";
 
 type errorStatusTypes = {
   name: string;
@@ -31,7 +33,7 @@ type errorStatusTypes = {
 
 export default function FormFiller() {
   const dispatch = useDispatch();
-  const { userAddModal } = useSelector((state: any) => state.muiModals);
+  const { userAddModal } = useSelector((state: RootState) => state.muiModals);
   
   useEffect(() => {
     !userAddModal &&
@@ -102,6 +104,7 @@ export default function FormFiller() {
       setSnackbarOpen(true);
       setData({ name: "", age: "", date: "" });
       dispatch(updateModalStatus("userAddModal"));
+      addNewUserAPI(data)
     }
   };
 

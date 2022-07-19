@@ -3,10 +3,11 @@ import { useSelector } from "react-redux";
 
 //mui imports
 import { Box } from "@mui/material";
+import { RootState } from "../Redux/store";
 
 export default function UserDetails() {
   const { selectedUserData } = useSelector(
-    (state: any) => state.usersInfo
+    (state: RootState) => state.usersInfo
   );
   return (
     <>
@@ -16,9 +17,9 @@ export default function UserDetails() {
             {Object.keys(selectedUserData).map(
               (item: string, index: number) => (
                 <ListItem key={index}>
-                  <ListItemText
+                  {/* <ListItemText
                     primary={`${item}==>${selectedUserData[item]}`}
-                  ></ListItemText>
+                  ></ListItemText> */}
                 </ListItem>
               )
             )}
