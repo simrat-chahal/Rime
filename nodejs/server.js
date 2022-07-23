@@ -1,73 +1,80 @@
 const express = require("express");
 const app = express();
-const port = 5000;
 const fs = require("fs");
 const crypto = require("crypto");
-app.use(express.json());
-app.use(express.urlencoded({
-  extended: true
-}));
-const id = crypto.randomBytes(16).toString("hex")
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
+const cors = require('cors');
 
-app.get("/about", (req, res) => {
-  res.status(200).json("this is about page");
-});
+app.use(cors());
 
-let student = { 
-    name: 'Mike',
-    age: 23, 
-    gender: 'Male',
-    department: 'English',
-    car: 'Honda' 
-};
-
-student.id = id
- 
-let data = JSON.stringify(student, null,2);
-
-// fs.writeFile('./storedData/data.json', data, (err) => {
-//     if (err) throw err;
-//     console.log('Data written to file');
+// app.use((req, res, next) => {
+//   res.setHeader("Access-Control-Allow-Origin", "*");
+//   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+//   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+//   res.setHeader("Access-Control-Allow-Credentials", true);
+//   next();
 // });
 
-// fs.readFile('./storedData/data.json', 'utf8', (err, data) => {
-//     if (err) {
-//       console.error(err);
-//       return;
-//     }
-//     console.log(data);
-//   });
+app.use(express.json());
+app.use(
+  express.urlencoded({
+    extended: true,
+  })
+);
+
+app.get("/sss", (req, res) => {
+  res.send("this is response");
+});
+
+app.get("/users", (req, res) => {
+  const data = fs.readFileSync("data.json", "utf8");
+  const jsonParsedData = JSON.parse(data);
+  if(jsonParsedData.length) {
+    res.status(200).send({status: true, data: jsonParsedData});
+  }
+  res.status(400).json({status: false, message: "request error"})
+});
 
 app.post("/addUser", (req, res) => {
-  console.log("adduser request",req.body)
-  const {name} = req.body
-  if(!name) {
-    return res.status(400).json({data: "this is bad request", status: false})
+  const newData = req.body;
+  if(newData?.name && newData?.age) {
+    newData.id = crypto.randomBytes(16).toString("hex");
+    const data = fs.readFileSync("data.json", "utf8");
+    const jsonParsedData = JSON.parse(data);
+    jsonParsedData.push(newData);
+    const jsonData = JSON.stringify(jsonParsedData, null, 2);
+    fs.writeFileSync("data.json", jsonData);
+    res.status(201).json({ status: true, message: "User added successfully", data: newData });
   }
-  res.status(201).json({data: "this is data", status: true})
-  // let fileData = null
-  // fs.readFileSync('./storedData/data.json', 'utf8', (err, data) => {
-  //   if (err) {
-  //     console.error(err);
-  //     return;
-  //   }
-  //   console.log(data);
-  //   fileData = data
-  // });
-
-  // const parsedData = JSON.parse(fileData)
-
-
-  // fs.writeFile("./storedData/data.txt", "Hello World!", function (err) {
-  //   if (err) return console.log(err);
-  //   console.log("Hello World > data.txt");
-  // });
+  res.status(400).json({status: false, message: "request error"})
 });
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+app.delete("/removeUser", (req, res) => {
+  const payloadData = req.body
+  if(payloadData?.id) {
+    const data = fs.readFileSync("data.json", "utf8");
+    const jsonParsedData = JSON.parse(data);
+    const index = jsonParsedData.findIndex((item)=>item.id === payloadData.id)
+    jsonParsedData.splice(index, 1)
+    const jsonData = JSON.stringify(jsonParsedData, null, 2);
+    fs.writeFileSync("data.json", jsonData);
+    res.json({status: true, message: "User removed successfully"});
+  }
+  res.status(400).json({status: false, message: "request error"})
 });
+
+app.put("/updateUserData",(req,res)=>{
+  const frontendData = req.body
+  if(frontendData?.id && frontendData?.name && frontendData?.age) {
+    const data = fs.readFileSync("data.json", "utf8");
+    const jsonParsedData = JSON.parse(data);
+    const index = jsonParsedData.findIndex((item)=>item.id === frontendData.id)
+    jsonParsedData[index] = frontendData
+    const jsonData = JSON.stringify(jsonParsedData, null, 2);
+    fs.writeFileSync("data.json", jsonData);
+    res.json({status: true, message: "User Updated successfully"});
+  }
+  res.status(400).json({status: false, message: "request error"})
+})
+
+app.listen(5000, () => console.log("server is listening..."));

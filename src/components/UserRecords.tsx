@@ -97,7 +97,7 @@ const UserRecords: React.FC = (): JSX.Element => {
                 <TableCell>{row.name}</TableCell>
                 <TableCell>{row.age}</TableCell>
                 <TableCell>
-                  {row.name === selectedUserData?.name && <ThreeDotsMenu />}
+                  {row.name === selectedUserData?.name && <ThreeDotsMenu itemData={row} />}
                 </TableCell>
               </TableRow>
             ))}

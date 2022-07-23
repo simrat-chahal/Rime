@@ -17,9 +17,9 @@ export default function UserDetails() {
             {Object.keys(selectedUserData).map(
               (item: string, index: number) => (
                 <ListItem key={index}>
-                  {/* <ListItemText
-                    primary={`${item}==>${selectedUserData[item]}`}
-                  ></ListItemText> */}
+                  <ListItemText
+                    primary={`${item}==>${(selectedUserData as any)[item]}`}
+                  ></ListItemText>
                 </ListItem>
               )
             )}

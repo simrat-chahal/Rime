@@ -4,7 +4,8 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 //redux imports
 import { useDispatch } from 'react-redux';
-import { deleteUserData } from '../Redux/reducers/usersInfoSlice';
+import { deleteUserData, updateEditMode } from '../Redux/reducers/usersInfoSlice';
+import { deleteUser } from '../apis/apisList';
 
 const options = [
   'Edit',
@@ -13,7 +14,12 @@ const options = [
 
 const ITEM_HEIGHT = 48;
 
-export default function ThreeDotsMenu() {
+interface ThreeDotsMenuProps {
+  itemData: any
+}
+
+export default function ThreeDotsMenu(props: ThreeDotsMenuProps) {
+  const {itemData} = props
   const dispatch = useDispatch()
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -27,11 +33,12 @@ export default function ThreeDotsMenu() {
   }
   const handleCloseEdit = (event: React.MouseEvent<HTMLElement>) => {
     event.stopPropagation()
+    dispatch(updateEditMode())
     setAnchorEl(null);
   };
   const handleCloseDelete = (event: React.MouseEvent<HTMLElement>) => {
     event.stopPropagation()
-    dispatch(deleteUserData())
+    deleteUser(itemData)
     setAnchorEl(null);
   };
 

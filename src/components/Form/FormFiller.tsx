@@ -17,14 +17,17 @@ import { formStyling } from "../../styles/customMuiStylingObjects";
 
 //redux-imports
 import { useSelector, useDispatch } from "react-redux";
-import { addUserData } from "../../Redux/reducers/usersInfoSlice";
+import {
+  addUserData,
+  updateEditMode,
+} from "../../Redux/reducers/usersInfoSlice";
 import { updateModalStatus } from "../../Redux/reducers/muiModalsSlice";
 import CountrySelect from "./CountrySelection";
 import PersonName from "./PersonName";
 import PersonAge from "./PersonAge";
 import AddNewUserButton from "./AddNewUserButton";
 import { RootState } from "../../Redux/store";
-import { addNewUserAPI } from "../../apis/apisList";
+import { addNewUser, updateUser } from "../../apis/apisList";
 
 type errorStatusTypes = {
   name: string;
@@ -34,23 +37,38 @@ type errorStatusTypes = {
 export default function FormFiller() {
   const dispatch = useDispatch();
   const { userAddModal } = useSelector((state: RootState) => state.muiModals);
-  
-  useEffect(() => {
-    !userAddModal &&
-      setErrorStatus({
-        name: "",
-        age: "",
-      });
-    setData({ name: "", age: "", date: "" });
-  }, [userAddModal]);
+  const { selectedUserData, editMode } = useSelector(
+    (state: RootState) => state.usersInfo
+  );
 
-  const [data, setData] = useState({ name: "", age: "", date: "" });
+  const [data, setData] = useState({ name: "", age: "" });
   const [errorStatus, setErrorStatus] = useState({
     name: "",
     age: "",
   } as errorStatusTypes);
 
   const [SnackbarOpen, setSnackbarOpen] = React.useState(false as boolean);
+
+  useEffect(() => {
+    if (!userAddModal) {
+      setErrorStatus({
+        name: "",
+        age: "",
+      });
+      setData({ name: "", age: "" });
+      editMode && dispatch(updateEditMode())
+    }
+  }, [userAddModal]);
+
+  useEffect(() => {
+    if (editMode) {
+      setData({
+        name: selectedUserData?.name!,
+        age: selectedUserData?.age?.toString() as string,
+      });
+      dispatch(updateModalStatus("userAddModal"));
+    }
+  }, [editMode]);
 
   const handleCloser = (
     event: React.SyntheticEvent | Event,
@@ -100,11 +118,10 @@ export default function FormFiller() {
   const submitHandler = (e: any) => {
     e.preventDefault();
     if (formValidator()) {
-      dispatch(addUserData(data));
-      setSnackbarOpen(true);
-      setData({ name: "", age: "", date: "" });
+      editMode? updateUser({...data, age: +data.age, id: selectedUserData?.id}): addNewUser({...data, age: +data.age});
+      // setSnackbarOpen(true);
+      setData({ name: "", age: "" });
       dispatch(updateModalStatus("userAddModal"));
-      addNewUserAPI(data)
     }
   };
 
@@ -154,7 +171,7 @@ export default function FormFiller() {
                     errorStatus={errorStatus}
                     multiInputHandler={multiInputHandler}
                   />
-                  <CountrySelect />
+                  {/* <CountrySelect /> */}
                   {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <DatePicker
                       value={data.date}
