@@ -82,14 +82,14 @@ const UserRecords: React.FC = (): JSX.Element => {
           <TableBody>
             {userList.map((row: any, index: number) => (
               <TableRow
-                hover={row.name === selectedUserData?.name ? false : true}
+                hover={row.id === selectedUserData?.id ? false : true}
                 role="checkbox"
                 tabIndex={-1}
                 key={index}
                 onClick={() => dispatch(saveCurrentUserData(row))}
                 sx={{
                   backgroundColor: `${
-                    row.name === selectedUserData?.name && "#8fb6df"
+                    row.id === selectedUserData?.id && "#81ecec"
                   }`,
                   cursor: "pointer",
                 }}
@@ -97,7 +97,7 @@ const UserRecords: React.FC = (): JSX.Element => {
                 <TableCell>{row.name}</TableCell>
                 <TableCell>{row.age}</TableCell>
                 <TableCell>
-                  {row.name === selectedUserData?.name && <ThreeDotsMenu itemData={row} />}
+                  {row.id === selectedUserData?.id && <ThreeDotsMenu itemData={row} />}
                 </TableCell>
               </TableRow>
             ))}

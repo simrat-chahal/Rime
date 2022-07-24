@@ -3,6 +3,7 @@ import { triggerFlashMessage } from "../Redux/reducers/flashMessageSlice";
 import {
   addUserData,
   deleteUserData,
+  saveCurrentUserData,
   savePeopleList,
   updateUserData,
   updateUsersFetchingLoader,
@@ -110,6 +111,30 @@ export const updateUser = async (apiData: object) => {
     store.dispatch(
       triggerFlashMessage({
         message: "User is updated successfully",
+        messageType: "success",
+        open: true,
+      })
+    );
+  } else {
+    store.dispatch(
+      triggerFlashMessage({
+        message: "Something went wrong",
+        messageType: "error",
+        open: true,
+      })
+    );
+  }
+};
+
+export const getSpecificUser = async (apiData: object) => {
+  // const res = await postAPI("users", apiData);
+  const res = await axios.get('users', { params: apiData });
+  if (res?.data?.status) {
+    console.log("api response",res)
+    store.dispatch(saveCurrentUserData(res.data.data));
+    store.dispatch(
+      triggerFlashMessage({
+        message: "Got specific user",
         messageType: "success",
         open: true,
       })
