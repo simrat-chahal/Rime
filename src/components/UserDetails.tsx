@@ -1,14 +1,25 @@
 import { List, ListItem, ListItemText, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 
 //mui imports
 import { Box } from "@mui/material";
 import { RootState } from "../Redux/store";
+import { useEffect } from "react";
+import { getSpecificUser } from "../apis/apisList";
 
-export default function UserDetails() {
+function UserDetails() {
+  const params = useParams()
   const { selectedUserData } = useSelector(
     (state: RootState) => state.usersInfo
   );
+
+  useEffect(()=>{
+    if(!selectedUserData) {
+      getSpecificUser({id: params.userId})
+    }
+  },[selectedUserData])
+
   return (
     <>
       <Box className="user-details">
@@ -29,10 +40,12 @@ export default function UserDetails() {
             variant="h3"
             sx={{ fontSize: "1.5rem", display: "flex", alignItems: "center" }}
           >
-            Data is not available
+            Sorry! Data is not found for given user id.
           </Typography>
         )}
       </Box>
     </>
   );
 }
+
+export default UserDetails
