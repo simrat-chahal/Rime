@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 //mui imports
 import Paper from "@mui/material/Paper";
@@ -11,9 +11,8 @@ import TableRow from "@mui/material/TableRow";
 import ThreeDotsMenu from "./ThreeDotsMenu";
 
 //redux imports
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 //redux actions
-import { saveCurrentUserData } from "../Redux/reducers/usersInfoSlice";
 import { RootState } from "../Redux/store";
 
 interface Column {
@@ -50,14 +49,9 @@ interface Data {
 }
 
 const UserRecords: React.FC = (): JSX.Element => {
-  const { userList, selectedUserData } = useSelector(
+  const { userList } = useSelector(
     (state: RootState) => state.usersInfo
   );
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    userList[0] && dispatch(saveCurrentUserData(userList[0]));
-  }, []);
 
   return (
     <Paper sx={{ width: "50%", overflow: "hidden" }}>
@@ -82,22 +76,17 @@ const UserRecords: React.FC = (): JSX.Element => {
           <TableBody>
             {userList.map((row: any, index: number) => (
               <TableRow
-                hover={row.name === selectedUserData?.name ? false : true}
                 role="checkbox"
                 tabIndex={-1}
                 key={index}
-                onClick={() => dispatch(saveCurrentUserData(row))}
                 sx={{
-                  backgroundColor: `${
-                    row.name === selectedUserData?.name && "#8fb6df"
-                  }`,
                   cursor: "pointer",
                 }}
               >
                 <TableCell>{row.name}</TableCell>
                 <TableCell>{row.age}</TableCell>
                 <TableCell>
-                  {row.name === selectedUserData?.name && <ThreeDotsMenu itemData={row} />}
+                  <ThreeDotsMenu itemData={row} />
                 </TableCell>
               </TableRow>
             ))}

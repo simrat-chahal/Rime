@@ -1,5 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+interface iState {
+  userAddModal: boolean
+}
+
 export const muiModalsSlice = createSlice({
   name: 'muiModals',
   initialState: {
