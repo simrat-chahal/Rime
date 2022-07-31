@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const fs = require("fs");
 const crypto = require("crypto");
+const { MongoClient } = require("mongodb");
 
 const cors = require("cors");
 
@@ -22,21 +23,57 @@ app.use(
   })
 );
 
-app.get("/sss", (req, res) => {
-  res.send("this is response");
-});
+async function main() {
+  /**
+   * Connection URI. Update <username>, <password>, and <your-cluster-url> to reflect your cluster.
+   * See https://docs.mongodb.com/ecosystem/drivers/node/ for more details
+   */
+  const uri = "mongodb://localhost:27017/myapp";
 
+  const client = new MongoClient(uri);
+
+  try {
+    // Connect to the MongoDB cluster
+    await client.connect();
+
+    // Make the appropriate DB calls
+    await listDatabases(client);
+  } catch (e) {
+    console.error(e);
+  } finally {
+    await client.close();
+  }
+}
+
+main().catch(console.error);
+async function listDatabases(client) {
+  databasesList = await client.db().admin().listDatabases();
+
+  console.log("Databases:");
+  databasesList.databases.forEach((db) => console.log(` - ${db.name}`));
+}
 app.get("/users", (req, res) => {
   const data = fs.readFileSync("data.json", "utf8");
   const jsonParsedData = JSON.parse(data);
-  res.status(200).send({ status: true, data: jsonParsedData });
+  setTimeout(() => {
+    if (jsonParsedData.length) {
+      res.status(200).send({ status: true, data: jsonParsedData });
+    } else {
+      res.status(200).send({ status: false, data: "No data is found" });
+    }
+  }, 1000);
 });
 
 app.get("/users/:userId", (req, res) => {
   const data = fs.readFileSync("data.json", "utf8");
   const jsonParsedData = JSON.parse(data);
-  const foundData = jsonParsedData.find((item) => item.id === req.params.userId);
-  res.status(200).json({ status: true, data: foundData });
+  const foundData = jsonParsedData.find((item) => item.id === req.query.id);
+  setTimeout(() => {
+    res.status(200).json({
+      status: foundData ? true : false,
+      data: foundData ? foundData : "Sorry! Data is not found for given user.",
+    });
+  }, 1000);
 });
 
 app.post("/addUser", (req, res) => {

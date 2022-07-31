@@ -1,12 +1,12 @@
 import axios from "axios";
 import { triggerFlashMessage } from "../Redux/reducers/flashMessageSlice";
+import { updateLoaderStatus } from "../Redux/reducers/loadersSlice";
 import {
   addUserData,
   deleteUserData,
   saveCurrentUserData,
   savePeopleList,
   updateUserData,
-  updateUsersFetchingLoader,
 } from "../Redux/reducers/usersInfoSlice";
 import { store } from "../Redux/store";
 
@@ -45,10 +45,23 @@ const putAPI = (apiUrl: string, apiData: object) => {
 };
 
 export const getUsers = async () => {
+  store.dispatch(
+    updateLoaderStatus({
+      loaderType: "usersFetchingLoader",
+      loaderAction: true,
+    })
+  );
   const res = await getAPI("users");
-  if (res?.data?.status) {
-    store.dispatch(savePeopleList(res.data.data));
-    store.dispatch(updateUsersFetchingLoader(false))
+  if (res?.data) {
+    store.dispatch(
+      updateLoaderStatus({
+        loaderType: "usersFetchingLoader",
+        loaderAction: false,
+      })
+    );
+    if (res.data.status) {
+      store.dispatch(savePeopleList(res.data.data));
+    }
   } else {
     store.dispatch(
       triggerFlashMessage({
@@ -127,18 +140,38 @@ export const updateUser = async (apiData: object) => {
 };
 
 export const getSpecificUser = async (apiData: object) => {
-  // const res = await postAPI("users", apiData);
-  const res = await axios.get('users', { params: apiData });
-  if (res?.data?.status) {
-    console.log("api response",res)
-    store.dispatch(saveCurrentUserData(res.data.data));
+  store.dispatch(
+    updateLoaderStatus({
+      loaderType: "loadingSpecificUser",
+      loaderAction: true,
+    })
+  );
+  const res = await axios.get("users", { params: apiData });
+  if (res?.data) {
     store.dispatch(
-      triggerFlashMessage({
-        message: "Got specific user",
-        messageType: "success",
-        open: true,
+      updateLoaderStatus({
+        loaderType: "loadingSpecificUser",
+        loaderAction: false,
       })
     );
+    if (res.data.status) {
+      store.dispatch(saveCurrentUserData(res.data.data));
+      store.dispatch(
+        triggerFlashMessage({
+          message: "Got specific user",
+          messageType: "success",
+          open: true,
+        })
+      );
+    } else {
+      store.dispatch(
+        triggerFlashMessage({
+          message: "Given user is not found",
+          messageType: "info",
+          open: true,
+        })
+      );
+    }
   } else {
     store.dispatch(
       triggerFlashMessage({

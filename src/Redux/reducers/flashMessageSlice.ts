@@ -20,8 +20,9 @@ export const flashMessageSlice = createSlice({
     triggerFlashMessage: (state: any, { payload }: any) => {
       return payload;
     },
-    closeFlashMessage: () => {
-      return initialState;
+    closeFlashMessage: (state: iState) => {
+      // return initialState;
+      state.open = false
     },
   },
 });

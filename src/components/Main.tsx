@@ -11,8 +11,10 @@ import { useNavigate } from "react-router-dom";
 
 const Main = () => {
   const navigate = useNavigate();
-  const { userList, usersFetchingLoader } = useSelector(
-    (state: RootState) => state.usersInfo
+  const { userList } = useSelector((state: RootState) => state.usersInfo);
+
+  const usersFetchingLoader = useSelector(
+    (state: RootState) => state.loaders.usersFetchingLoader
   );
 
   useEffect(() => {

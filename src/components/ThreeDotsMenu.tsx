@@ -5,7 +5,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 //redux imports
 import { useDispatch } from "react-redux";
 import {
-  deleteUserData,
+  saveCurrentUserData,
   updateEditMode,
 } from "../Redux/reducers/usersInfoSlice";
 import { deleteUser } from "../apis/apisList";
@@ -25,6 +25,7 @@ export default function ThreeDotsMenu(props: ThreeDotsMenuProps) {
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     event.stopPropagation();
+    dispatch(saveCurrentUserData(itemData))
     setAnchorEl(event.currentTarget);
   };
 

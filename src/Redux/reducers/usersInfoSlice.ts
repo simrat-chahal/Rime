@@ -8,10 +8,9 @@ type selectedUserDataTS = {
 
 type usersInfoSliceTypescript = {
   value: number;
-  userList: object[];
+  userList: selectedUserDataTS[];
   selectedUserData: null | selectedUserDataTS;
   editMode: boolean;
-  usersFetchingLoader: boolean;
 };
 
 const iState: usersInfoSliceTypescript = {
@@ -20,23 +19,22 @@ const iState: usersInfoSliceTypescript = {
   // userList: [{name:"rohit",age:"23",date:""},{name:"Elex",age:"14",date:""}],
   selectedUserData: null,
   editMode: false,
-  usersFetchingLoader: true,
 };
 
 export const usersInfoslice = createSlice({
   name: "usersInfo",
   initialState: iState,
   reducers: {
-    savePeopleList: (state: any, action: any) => {
+    savePeopleList: (state: usersInfoSliceTypescript, action: any) => {
       state.userList = action.payload;
     },
-    addUserData: (state: any, action: any) => {
+    addUserData: (state: usersInfoSliceTypescript, action: any) => {
       state.userList.push(action.payload);
     },
-    saveCurrentUserData: (state: any, action: any) => {
+    saveCurrentUserData: (state: usersInfoSliceTypescript, action: any) => {
       state.selectedUserData = action.payload;
     },
-    deleteUserData: (state: any, action: any) => {
+    deleteUserData: (state: usersInfoSliceTypescript, action: any) => {
       const { userList } = state;
       const index = userList.findIndex(
         (item: any) => item.id === action.payload.id
@@ -44,18 +42,15 @@ export const usersInfoslice = createSlice({
       state.userList.splice(index, 1);
       state.selectedUserData = null;
     },
-    updateEditMode: (state: any) => {
+    updateEditMode: (state: usersInfoSliceTypescript) => {
       state.editMode = !state.editMode;
     },
-    updateUserData: (state: any, action: any) => {
+    updateUserData: (state: usersInfoSliceTypescript, action: any) => {
       const index = state.userList.findIndex(
         (item: any) => item.id === action.payload.id
       );
       state.userList[index] = action.payload;
-    },
-    updateUsersFetchingLoader: (state: any, { payload }: any) => {
-      state.usersFetchingLoader = payload;
-    },
+    }
   },
 });
 
@@ -66,6 +61,5 @@ export const {
   deleteUserData,
   updateEditMode,
   updateUserData,
-  updateUsersFetchingLoader,
 } = usersInfoslice.actions; //actions
 export default usersInfoslice.reducer;
