@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 type selectedUserDataTS = {
   name: string | undefined;
   age: number | undefined;
-  id: string;
+  _id: string;
 };
 
 type usersInfoSliceTypescript = {
@@ -16,7 +16,6 @@ type usersInfoSliceTypescript = {
 const iState: usersInfoSliceTypescript = {
   value: 0,
   userList: [],
-  // userList: [{name:"rohit",age:"23",date:""},{name:"Elex",age:"14",date:""}],
   selectedUserData: null,
   editMode: false,
 };
@@ -37,7 +36,7 @@ export const usersInfoslice = createSlice({
     deleteUserData: (state: usersInfoSliceTypescript, action: any) => {
       const { userList } = state;
       const index = userList.findIndex(
-        (item: any) => item.id === action.payload.id
+        (item: any) => item._id === action.payload._id
       );
       state.userList.splice(index, 1);
       state.selectedUserData = null;
@@ -47,7 +46,7 @@ export const usersInfoslice = createSlice({
     },
     updateUserData: (state: usersInfoSliceTypescript, action: any) => {
       const index = state.userList.findIndex(
-        (item: any) => item.id === action.payload.id
+        (item: any) => item._id === action.payload._id
       );
       state.userList[index] = action.payload;
     }

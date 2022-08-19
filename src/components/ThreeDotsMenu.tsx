@@ -44,7 +44,7 @@ export default function ThreeDotsMenu(props: ThreeDotsMenuProps) {
   };
   const handleOpenItem = (event: React.MouseEvent<HTMLElement>) => {
     event.stopPropagation();
-    navigate(itemData.id);
+    navigate(itemData._id);
     setAnchorEl(null);
   };
 
