@@ -6,7 +6,7 @@ interface iState {
 }
 
 type payloadTypes = {
-  loaderType: string;
+  loaderName: string;
   loaderAction: boolean;
 };
 
@@ -25,7 +25,7 @@ export const loadersSlice = createSlice({
   reducers: {
     updateLoaderStatus: (state: iState, action: action) => {
       const { payload } = action;
-      (state as any)[payload.loaderType] = payload.loaderAction;
+      (state as any)[payload.loaderName] = payload.loaderAction;
     }
   },
 });

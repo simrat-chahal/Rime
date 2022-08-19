@@ -116,7 +116,7 @@ export default function FormFiller() {
   const submitHandler = (e: any) => {
     e.preventDefault();
     if (formValidator()) {
-      editMode? updateUser({...data, age: +data.age, id: selectedUserData?.id}): addNewUser({...data, age: +data.age});
+      editMode? updateUser({...selectedUserData, age: +data.age, name: data.name}): addNewUser({...data, age: +data.age});
       // setSnackbarOpen(true);
       setData({ name: "", age: "" });
       dispatch(updateModalStatus("userAddModal"));

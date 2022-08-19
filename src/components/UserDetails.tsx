@@ -27,7 +27,7 @@ function UserDetails() {
 
   useEffect(() => {
     if (!selectedUserData) {
-      getSpecificUser({ id: params.userId });
+      getSpecificUser({ _id: params.userId });
     }
   }, [selectedUserData]);
 
@@ -47,15 +47,16 @@ function UserDetails() {
           {selectedUserData ? (
             <>
               <List>
-                {Object.keys(selectedUserData).map(
-                  (item: string, index: number) => (
-                    <ListItem key={index}>
-                      <ListItemText
-                        primary={`${item}==>${(selectedUserData as any)[item]}`}
-                      ></ListItemText>
-                    </ListItem>
-                  )
-                )}
+                <ListItem>
+                  <ListItemText
+                    primary={`Name: ${selectedUserData.name}`}
+                  ></ListItemText>
+                </ListItem>
+                <ListItem>
+                  <ListItemText
+                    primary={`Age: ${selectedUserData.age}`}
+                  ></ListItemText>
+                </ListItem>
               </List>
             </>
           ) : (
