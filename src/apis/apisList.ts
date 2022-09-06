@@ -74,7 +74,7 @@ export const getUsers = async () => {
 };
 
 export const addNewUser = async (apiData: object) => {
-  const res = await postAPI("addUser", apiData);
+  const res = await postAPI("add-user", apiData);
   if (res?.data?.status) {
     store.dispatch(addUserData(res.data.data));
     store.dispatch(
@@ -96,7 +96,7 @@ export const addNewUser = async (apiData: object) => {
 };
 
 export const deleteUser = async (apiData: object) => {
-  const res = await deleteAPI("removeUser", apiData);
+  const res = await deleteAPI("delete-user", apiData);
   if (res?.data?.status) {
     store.dispatch(deleteUserData(apiData));
     store.dispatch(
@@ -117,8 +117,30 @@ export const deleteUser = async (apiData: object) => {
   }
 };
 
+export const deleteAllUsers = async (apiData: object) => {
+  const res = await deleteAPI("delete-all", apiData);
+  if (res?.data?.status) {
+    store.dispatch(savePeopleList([]));
+    store.dispatch(
+      triggerFlashMessage({
+        message: "All users are deleted successfully",
+        messageType: "success",
+        open: true,
+      })
+    );
+  } else {
+    store.dispatch(
+      triggerFlashMessage({
+        message: "Something went wrong",
+        messageType: "error",
+        open: true,
+      })
+    );
+  }
+};
+
 export const updateUser = async (apiData: object) => {
-  const res = await putAPI("updateUserData", apiData);
+  const res = await putAPI("update-user-data", apiData);
   if (res?.data?.status) {
     store.dispatch(updateUserData(apiData));
     store.dispatch(

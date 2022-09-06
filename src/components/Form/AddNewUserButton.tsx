@@ -6,9 +6,11 @@ const AddNewUserButton = () => {
   const dispatch = useDispatch();
   return (
     <Button
-      variant="outlined"
+      variant="contained"
       onClick={() => dispatch(updateModalStatus("userAddModal"))}
-    >Add New User</Button>
+    >
+      Add New User
+    </Button>
   );
 };
 

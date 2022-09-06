@@ -6,10 +6,19 @@ import NotFoundPage from "./components/NotFoundPage";
 import FlashMessage from "./components/FlashMessage";
 import FormFiller from "./components/Form/FormFiller";
 import UserDetails from "./components/UserDetails";
+import { createTheme, ThemeProvider } from "@mui/material";
 
 const App: React.FC = (): JSX.Element => {
+  const buttonTheme = createTheme({
+    typography: {
+      button: {
+        textTransform: "none"
+      }
+    }
+  });
   return (
     <div className="App">
+      <ThemeProvider theme={buttonTheme}>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Main />} />
@@ -22,6 +31,7 @@ const App: React.FC = (): JSX.Element => {
       </BrowserRouter>
       <FlashMessage />
       <FormFiller />
+      </ThemeProvider>
     </div>
   );
 };
