@@ -18,7 +18,7 @@ const Main = () => {
   );
 
   useEffect(() => {
-    getUsers();
+    !usersFetchingLoader && getUsers();
   }, []);
 
   useEffect(() => {

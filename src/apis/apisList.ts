@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { triggerFlashMessage } from "../Redux/reducers/flashMessageSlice";
 import { updateLoaderStatus } from "../Redux/reducers/loadersSlice";
 import {
@@ -45,24 +45,32 @@ const putAPI = (apiUrl: string, apiData: object) => {
 };
 
 export const getUsers = async () => {
-  store.dispatch(
-    updateLoaderStatus({
-      loaderType: "usersFetchingLoader",
-      loaderAction: true,
-    })
-  );
-  const res = await getAPI("users");
-  if (res?.data) {
+  try {
     store.dispatch(
       updateLoaderStatus({
-        loaderType: "usersFetchingLoader",
+        loaderName: "usersFetchingLoader",
+        loaderAction: true,
+      })
+    );
+    const res = await getAPI("users");
+    store.dispatch(
+      updateLoaderStatus({
+        loaderName: "usersFetchingLoader",
         loaderAction: false,
       })
     );
     if (res.data.status) {
       store.dispatch(savePeopleList(res.data.data));
+    } else {
+      store.dispatch(
+        triggerFlashMessage({
+          message: "No data is found",
+          messageType: "info",
+          open: true,
+        })
+      );
     }
-  } else {
+  } catch (error) {
     store.dispatch(
       triggerFlashMessage({
         message: "Something went wrong",
@@ -162,17 +170,19 @@ export const updateUser = async (apiData: object) => {
 };
 
 export const getSpecificUser = async (apiData: object) => {
-  store.dispatch(
-    updateLoaderStatus({
-      loaderType: "loadingSpecificUser",
-      loaderAction: true,
-    })
-  );
-  const res = await axios.get("users", { params: apiData });
-  if (res?.data) {
+  try {
     store.dispatch(
       updateLoaderStatus({
-        loaderType: "loadingSpecificUser",
+        loaderName: "loadingSpecificUser",
+        loaderAction: true,
+      })
+    );
+    const res: any = await axios
+      .get("users", { params: apiData })
+      .catch((error: AxiosError) => error);
+    store.dispatch(
+      updateLoaderStatus({
+        loaderName: "loadingSpecificUser",
         loaderAction: false,
       })
     );
@@ -194,7 +204,7 @@ export const getSpecificUser = async (apiData: object) => {
         })
       );
     }
-  } else {
+  } catch (error) {
     store.dispatch(
       triggerFlashMessage({
         message: "Something went wrong",
