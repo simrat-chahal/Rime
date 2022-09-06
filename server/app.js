@@ -36,19 +36,17 @@ app.get("/users/:userId", async (req, res) => {
     if (result.length) {
       res.status(200).send({ status: true, data: result[0] });
     } else {
-      res
-        .status(404)
-        .send({
-          status: false,
-          message: "Sorry! Data is not found for given user",
-        });
+      res.status(404).send({
+        status: false,
+        message: "Sorry! Data is not found for given user",
+      });
     }
   } catch (error) {
     res.status(500).send({ status: false, errorInformation: error });
   }
 });
 
-app.put("/updateUserData", async (req, res) => {
+app.put("/update-user-data", async (req, res) => {
   const payloadData = req.body;
   try {
     const result = await StudentModel.updateOne(
@@ -71,7 +69,7 @@ app.put("/updateUserData", async (req, res) => {
   }
 });
 
-app.post("/addUser", async (req, res) => {
+app.post("/add-user", async (req, res) => {
   try {
     const result = await StudentModel.insertMany([req.body]);
     res.status(201).json({
@@ -84,7 +82,7 @@ app.post("/addUser", async (req, res) => {
   }
 });
 
-app.delete("/removeUser", async (req, res) => {
+app.delete("/delete-user", async (req, res) => {
   try {
     const result = await StudentModel.deleteOne({ _id: req.body._id });
     if (result.deletedCount === 0) {
@@ -99,6 +97,25 @@ app.delete("/removeUser", async (req, res) => {
     });
   } catch (error) {
     res.status(500).send({ status: false, errorInformation: error });
+  }
+});
+
+app.delete("/delete-all", async (req, res) => {
+  try {
+    const result = await StudentModel.deleteMany({ name: { $ne: "630faadc0d3537896ac7863y" } });
+    if (result.deletedCount === 0) {
+      res
+        .status(400)
+        .json({ status: false, message: "To be deleted user is not found" });
+    }
+    res.status(200).json({
+      status: true,
+      message: "all users deleted successfully",
+      data: result,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ status: false, errorInformation: error.message });
   }
 });
 
