@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosResponse } from "axios";
+import axios, { AxiosError } from "axios";
 import { triggerFlashMessage } from "../Redux/reducers/flashMessageSlice";
 import { updateLoaderStatus } from "../Redux/reducers/loadersSlice";
 import {
@@ -6,6 +6,7 @@ import {
   deleteUserData,
   saveCurrentUserData,
   savePeopleList,
+  selectedUserDataInterface,
   updateUserData,
 } from "../Redux/reducers/usersInfoSlice";
 import { store } from "../Redux/store";
@@ -103,7 +104,7 @@ export const addNewUser = async (apiData: object) => {
   }
 };
 
-export const deleteUser = async (apiData: object) => {
+export const deleteUser = async (apiData: selectedUserDataInterface) => {
   const res = await deleteAPI("delete-user", apiData);
   if (res?.data?.status) {
     store.dispatch(deleteUserData(apiData));
@@ -147,7 +148,7 @@ export const deleteAllUsers = async (apiData: object) => {
   }
 };
 
-export const updateUser = async (apiData: object) => {
+export const updateUser = async (apiData: selectedUserDataInterface | any) => {
   const res = await putAPI("update-user-data", apiData);
   if (res?.data?.status) {
     store.dispatch(updateUserData(apiData));

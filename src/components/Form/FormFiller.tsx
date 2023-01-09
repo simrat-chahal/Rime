@@ -17,9 +17,7 @@ import { formStyling } from "../../styles/customMuiStylingObjects";
 
 //redux-imports
 import { useSelector, useDispatch } from "react-redux";
-import {
-  updateEditMode,
-} from "../../Redux/reducers/usersInfoSlice";
+import { updateEditMode } from "../../Redux/reducers/usersInfoSlice";
 import { updateModalStatus } from "../../Redux/reducers/muiModalsSlice";
 // import CountrySelect from "./CountrySelection";
 import PersonName from "./PersonName";
@@ -54,7 +52,7 @@ export default function FormFiller() {
         age: "",
       });
       setData({ name: "", age: "" });
-      editMode && dispatch(updateEditMode())
+      editMode && dispatch(updateEditMode());
     }
   }, [userAddModal]);
 
@@ -116,7 +114,9 @@ export default function FormFiller() {
   const submitHandler = (e: any) => {
     e.preventDefault();
     if (formValidator()) {
-      editMode? updateUser({...selectedUserData, age: +data.age, name: data.name}): addNewUser({...data, age: +data.age});
+      editMode
+        ? updateUser({ ...selectedUserData, age: +data.age, name: data.name })
+        : addNewUser({ ...data, age: +data.age });
       // setSnackbarOpen(true);
       setData({ name: "", age: "" });
       dispatch(updateModalStatus("userAddModal"));
@@ -133,10 +133,6 @@ export default function FormFiller() {
           open={userAddModal}
           onClose={() => dispatch(updateModalStatus("userAddModal"))}
           closeAfterTransition
-          BackdropComponent={Backdrop}
-          BackdropProps={{
-            timeout: 500,
-          }}
         >
           <Fade in={userAddModal}>
             <Box sx={{ display: "flex", justifyContent: "center" }}>

@@ -1,32 +1,28 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface iState {
+interface initialStateInterface {
   loadingSpecificUser: boolean;
   usersFetchingLoader: boolean;
 }
 
-type payloadTypes = {
+interface payloadInterface {
   loaderName: string;
   loaderAction: boolean;
-};
-
-interface action {
-  payload: payloadTypes;
 }
 
-const initialState: iState = {
+const initialState: initialStateInterface = {
   loadingSpecificUser: false,
   usersFetchingLoader: false,
 };
 
 export const loadersSlice = createSlice({
   name: "loaders",
-  initialState: initialState,
+  initialState,
   reducers: {
-    updateLoaderStatus: (state: iState, action: action) => {
+    updateLoaderStatus: (state, action: PayloadAction<payloadInterface>) => {
       const { payload } = action;
       (state as any)[payload.loaderName] = payload.loaderAction;
-    }
+    },
   },
 });
 

@@ -1,19 +1,19 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-type selectedUserDataTS = {
+interface initialStateInterface {
+  value: number;
+  userList: selectedUserDataInterface[];
+  selectedUserData: null | selectedUserDataInterface;
+  editMode: boolean;
+}
+
+export interface selectedUserDataInterface {
   name: string | undefined;
   age: number | undefined;
   _id: string;
-};
+}
 
-type usersInfoSliceTypescript = {
-  value: number;
-  userList: selectedUserDataTS[];
-  selectedUserData: null | selectedUserDataTS;
-  editMode: boolean;
-};
-
-const iState: usersInfoSliceTypescript = {
+const initialState: initialStateInterface = {
   value: 0,
   userList: [],
   selectedUserData: null,
@@ -22,18 +22,27 @@ const iState: usersInfoSliceTypescript = {
 
 export const usersInfoslice = createSlice({
   name: "usersInfo",
-  initialState: iState,
+  initialState,
   reducers: {
-    savePeopleList: (state: usersInfoSliceTypescript, action: any) => {
+    savePeopleList: (
+      state,
+      action: PayloadAction<selectedUserDataInterface[]>
+    ) => {
       state.userList = action.payload;
     },
-    addUserData: (state: usersInfoSliceTypescript, action: any) => {
+    addUserData: (state, action: PayloadAction<selectedUserDataInterface>) => {
       state.userList.push(action.payload);
     },
-    saveCurrentUserData: (state: usersInfoSliceTypescript, action: any) => {
+    saveCurrentUserData: (
+      state,
+      action: PayloadAction<selectedUserDataInterface>
+    ) => {
       state.selectedUserData = action.payload;
     },
-    deleteUserData: (state: usersInfoSliceTypescript, action: any) => {
+    deleteUserData: (
+      state,
+      action: PayloadAction<selectedUserDataInterface>
+    ) => {
       const { userList } = state;
       const index = userList.findIndex(
         (item: any) => item._id === action.payload._id
@@ -41,15 +50,18 @@ export const usersInfoslice = createSlice({
       state.userList.splice(index, 1);
       state.selectedUserData = null;
     },
-    updateEditMode: (state: usersInfoSliceTypescript) => {
+    updateEditMode: (state) => {
       state.editMode = !state.editMode;
     },
-    updateUserData: (state: usersInfoSliceTypescript, action: any) => {
+    updateUserData: (
+      state,
+      action: PayloadAction<selectedUserDataInterface>
+    ) => {
       const index = state.userList.findIndex(
         (item: any) => item._id === action.payload._id
       );
       state.userList[index] = action.payload;
-    }
+    },
   },
 });
 
