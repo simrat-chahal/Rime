@@ -40,13 +40,13 @@ const columns: readonly Column[] = [
   },
 ];
 
-interface Data {
-  name: string;
-  code: string;
-  population: number;
-  size: number;
-  density: number;
-}
+// interface Data {
+//   name: string;
+//   code: string;
+//   population: number;
+//   size: number;
+//   density: number;
+// }
 
 const UserRecords: React.FC = (): JSX.Element => {
   const { userList } = useSelector(

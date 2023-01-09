@@ -1,13 +1,13 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AlertColor } from "@mui/material";
 
-interface iState {
+interface initialStateInterface {
   open: boolean;
   messageType: AlertColor | undefined;
   message: string;
 }
 
-const initialState: iState = {
+const initialState: initialStateInterface = {
   open: false,
   messageType: undefined,
   message: "",
@@ -15,14 +15,14 @@ const initialState: iState = {
 
 export const flashMessageSlice = createSlice({
   name: "flashMessage",
-  initialState: initialState,
+  initialState,
   reducers: {
-    triggerFlashMessage: (state: any, { payload }: any) => {
-      return payload;
+    triggerFlashMessage: (state, action: PayloadAction<initialStateInterface>) => {
+      return action.payload;
     },
-    closeFlashMessage: (state: iState) => {
+    closeFlashMessage: (state) => {
       // return initialState;
-      state.open = false
+      state.open = false;
     },
   },
 });

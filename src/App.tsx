@@ -12,25 +12,23 @@ const App: React.FC = (): JSX.Element => {
   const buttonTheme = createTheme({
     typography: {
       button: {
-        textTransform: "none"
-      }
-    }
+        textTransform: "none",
+      },
+    },
   });
   return (
     <div className="App">
       <ThemeProvider theme={buttonTheme}>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Main />} />
-          <Route path="users" element={<Users />}>
-            {/* <Route path=":userId" element={<UserDetails />} /> */}
-          </Route>
-          <Route path="users/:userId" element={<UserDetails />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
-      </BrowserRouter>
-      <FlashMessage />
-      <FormFiller />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Main />} />
+            <Route path="users" element={<Users />}></Route>
+            <Route path="users/:userId" element={<UserDetails />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </BrowserRouter>
+        <FlashMessage />
+        <FormFiller />
       </ThemeProvider>
     </div>
   );

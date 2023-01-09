@@ -6,11 +6,11 @@ import {
   Typography,
 } from "@mui/material";
 import { useSelector } from "react-redux";
-import { Link, useParams } from "react-router-dom";
 import { getSpecificUser } from "../apis/apisList";
 import { RootState } from "../Redux/store";
 import { useEffect } from "react";
 import FullScreenLoader from "./FullScreenLoader";
+import { useNavigate, useParams } from "react-router-dom";
 
 //mui imports
 import { Box } from "@mui/material";
@@ -18,6 +18,7 @@ import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 
 function UserDetails() {
   const params = useParams();
+  const navigate = useNavigate();
   const { selectedUserData } = useSelector(
     (state: RootState) => state.usersInfo
   );
@@ -38,11 +39,13 @@ function UserDetails() {
   return (
     <>
       <Box>
-        <Link to="/users" style={{ textDecoration: "none" }}>
-          <Button variant="outlined" startIcon={<KeyboardBackspaceIcon />}>
-            Users
-          </Button>
-        </Link>
+        <Button
+          variant="outlined"
+          startIcon={<KeyboardBackspaceIcon />}
+          onClick={() => navigate("/users")}
+        >
+          Users
+        </Button>
         <Box style={{ width: "fit-content", margin: "auto" }}>
           {selectedUserData ? (
             <>
