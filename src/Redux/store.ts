@@ -1,15 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit';
-import usersInfoSlice from './reducers/usersInfoSlice'
-import muiModalsSlice from './reducers/muiModalsSlice';
-import flashMessageSlice from './reducers/flashMessageSlice';
-import loadersSlice from './reducers/loadersSlice';
+import usersInfoReducer from './reducers/usersInfoSlice'
+import muiModalsReducer from './reducers/muiModalsSlice';
+import flashMessageReducer from './reducers/flashMessageSlice';
+import loadersReducer from './reducers/loadersSlice';
 
 export const store =  configureStore({
   reducer: {
-    usersInfo: usersInfoSlice,
-    muiModals: muiModalsSlice,
-    flashMessage: flashMessageSlice,
-    loaders: loadersSlice
+    usersInfo: usersInfoReducer,
+    muiModals: muiModalsReducer,
+    flashMessage: flashMessageReducer,
+    loaders: loadersReducer
   },
 });
 

@@ -35,7 +35,7 @@ const Main = () => {
         className="center-element"
         mb={2}
         height="100vh"
-        sx={{ backgroundColor: "#a6ab7f" }}
+        sx={{ backgroundColor: "#3b3c32" }}
       >
         <Alert variant="filled" severity="info" sx={{ marginBottom: "14px" }}>
           Sorry! No Data is found.

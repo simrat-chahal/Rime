@@ -1,5 +1,5 @@
 {
-  "name": "my-app",
+  "name": "rime",
   "version": "0.1.0",
   "proxy": "http://localhost:5000",
   "private": true,
@@ -21,7 +21,7 @@
     "axios": "^1.2.2",
     "cors": "^2.8.5",
     "mongodb": "^4.13.0",
-    "mongoose": "^6.8.3",
+    "mongoose": "^6.8.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.5",

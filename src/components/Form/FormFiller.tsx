@@ -24,6 +24,7 @@ import PersonName from "./PersonName";
 import PersonAge from "./PersonAge";
 import { RootState } from "../../Redux/store";
 import { addNewUser, updateUser } from "../../apis/apisList";
+import { validateAge, validateName } from "../../helpers/helperFunctions";
 
 type errorStatusTypes = {
   name: string;
@@ -80,12 +81,12 @@ export default function FormFiller() {
   const multiInputHandler = (e: any) => {
     const { name, value } = e.target;
     if (name === "userName") {
-      if (/(^$|^[A-z])/.test(value)) {
+      if (validateName(value)) {
         setData({ ...data, name: value });
         setErrorStatus({ ...errorStatus, name: "" });
       }
     } else if (name === "age") {
-      if (/(^$|^[0-9]+$)/.test(value)) {
+      if (validateAge(value)) {
         setData({ ...data, age: value });
         setErrorStatus({ ...errorStatus, age: "" });
       }
