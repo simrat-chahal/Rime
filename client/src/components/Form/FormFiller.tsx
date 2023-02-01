@@ -17,7 +17,10 @@ import { formStyling } from "../../styles/customMuiStylingObjects";
 
 //redux-imports
 import { useSelector, useDispatch } from "react-redux";
-import { updateEditMode } from "../../Redux/reducers/usersInfoSlice";
+import {
+  addUserData,
+  updateEditMode,
+} from "../../Redux/reducers/usersInfoSlice";
 import { updateModalStatus } from "../../Redux/reducers/muiModalsSlice";
 // import CountrySelect from "./CountrySelection";
 import PersonName from "./PersonName";
@@ -25,6 +28,8 @@ import PersonAge from "./PersonAge";
 import { RootState } from "../../Redux/store";
 import { addNewUser, updateUser } from "../../apis/apisList";
 import { validateAge, validateName } from "../../helpers/helperFunctions";
+import { useAddNewUserMutation } from "../../apis/usersApi";
+import { triggerFlashMessage } from "../../Redux/reducers/flashMessageSlice";
 
 type errorStatusTypes = {
   name: string;
@@ -32,6 +37,7 @@ type errorStatusTypes = {
 };
 
 export default function FormFiller() {
+  const [createNewUser, addNewUserResponse] = useAddNewUserMutation();
   const dispatch = useDispatch();
   const { userAddModal } = useSelector((state: RootState) => state.muiModals);
   const { selectedUserData, editMode } = useSelector(
@@ -45,6 +51,19 @@ export default function FormFiller() {
   } as errorStatusTypes);
 
   const [SnackbarOpen, setSnackbarOpen] = React.useState(false as boolean);
+
+  useEffect(() => {
+    if (addNewUserResponse.isSuccess) {
+      dispatch(addUserData(addNewUserResponse.data.data));
+      dispatch(
+        triggerFlashMessage({
+          message: "User is added successfully",
+          messageType: "success",
+          open: true,
+        })
+      );
+    }
+  }, [addNewUserResponse.isSuccess]);
 
   useEffect(() => {
     if (!userAddModal) {
@@ -117,7 +136,7 @@ export default function FormFiller() {
     if (formValidator()) {
       editMode
         ? updateUser({ ...selectedUserData, age: +data.age, name: data.name })
-        : addNewUser({ ...data, age: +data.age });
+        : createNewUser({ ...data, age: +data.age });
       // setSnackbarOpen(true);
       setData({ name: "", age: "" });
       dispatch(updateModalStatus("userAddModal"));

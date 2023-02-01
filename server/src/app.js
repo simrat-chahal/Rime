@@ -14,19 +14,21 @@ app.use(express.json());
 (async () =>
   await mongoose
     .connect("mongodb://localhost:27017/myapp")
-    .catch((err) => console.log("catch bloc")))();
+    .catch((err) => console.log("catch block")))();
 
 app.get("/users", async (req, res) => {
-  try {
-    const result = await StudentModel.find();
-    if (result.length) {
-      res.status(200).send({ status: true, data: result });
-    } else {
-      res.status(200).send({ status: false, message: "No data is found" });
+  setTimeout(async () => {
+    try {
+      const result = await StudentModel.find();
+      if (result.length) {
+        res.status(200).send({ status: true, data: result });
+      } else {
+        res.status(200).send({ status: false, message: "No data is found" });
+      }
+    } catch (error) {
+      res.status(500).send({ status: false, errorInformation: error });
     }
-  } catch (error) {
-    res.status(500).send({ status: false, errorInformation: error });
-  }
+  }, 3000);
 });
 
 app.get("/users/:userId", async (req, res) => {
@@ -102,7 +104,9 @@ app.delete("/delete-user", async (req, res) => {
 
 app.delete("/delete-all", async (req, res) => {
   try {
-    const result = await StudentModel.deleteMany({ name: { $ne: "630faadc0d3537896ac7863y" } });
+    const result = await StudentModel.deleteMany({
+      name: { $ne: "630faadc0d3537896ac7863y" },
+    });
     if (result.deletedCount === 0) {
       res
         .status(400)

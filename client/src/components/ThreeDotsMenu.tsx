@@ -1,15 +1,17 @@
-import * as React from "react";
+import React, { useEffect } from "react";
 import { IconButton, Menu, MenuItem } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 //redux imports
 import { useDispatch } from "react-redux";
 import {
+  deleteUserData,
   saveCurrentUserData,
   updateEditMode,
 } from "../Redux/reducers/usersInfoSlice";
-import { deleteUser } from "../apis/apisList";
 import { useNavigate } from "react-router-dom";
+import { useDeleteUserMutation } from "../apis/usersApi";
+import { triggerFlashMessage } from "../Redux/reducers/flashMessageSlice";
 
 const ITEM_HEIGHT = 48;
 
@@ -21,11 +23,12 @@ export default function ThreeDotsMenu(props: ThreeDotsMenuProps) {
   const { itemData } = props;
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [deleteUser, deleteUserResponse] = useDeleteUserMutation();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     event.stopPropagation();
-    dispatch(saveCurrentUserData(itemData))
+    dispatch(saveCurrentUserData(itemData));
     setAnchorEl(event.currentTarget);
   };
 
@@ -40,6 +43,7 @@ export default function ThreeDotsMenu(props: ThreeDotsMenuProps) {
   const handleCloseDelete = (event: React.MouseEvent<HTMLElement>) => {
     event.stopPropagation();
     deleteUser(itemData);
+
     setAnchorEl(null);
   };
   const handleOpenItem = (event: React.MouseEvent<HTMLElement>) => {
@@ -47,6 +51,29 @@ export default function ThreeDotsMenu(props: ThreeDotsMenuProps) {
     navigate(itemData._id);
     setAnchorEl(null);
   };
+
+  useEffect(() => {
+    if (deleteUserResponse.isSuccess) {
+      if (deleteUserResponse.data.status) {
+        dispatch(deleteUserData(itemData));
+        dispatch(
+          triggerFlashMessage({
+            message: "User is deleted successfully",
+            messageType: "success",
+            open: true,
+          })
+        );
+      } else {
+        dispatch(
+          triggerFlashMessage({
+            message: "Something went wrong",
+            messageType: "error",
+            open: true,
+          })
+        );
+      }
+    }
+  }, [deleteUserResponse.isSuccess]);
 
   return (
     <>

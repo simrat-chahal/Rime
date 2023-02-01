@@ -6,7 +6,6 @@ import {
   Typography,
 } from "@mui/material";
 import { useSelector } from "react-redux";
-import { getSpecificUser } from "../apis/apisList";
 import { RootState } from "../Redux/store";
 import { useEffect } from "react";
 import FullScreenLoader from "./FullScreenLoader";
@@ -15,24 +14,44 @@ import { useNavigate, useParams } from "react-router-dom";
 //mui imports
 import { Box } from "@mui/material";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
+import { useGetSpecificUserQuery } from "../apis/usersApi";
+import { triggerFlashMessage } from "../Redux/reducers/flashMessageSlice";
+import { saveCurrentUserData } from "../Redux/reducers/usersInfoSlice";
+import { useDispatch } from "react-redux";
 
 function UserDetails() {
   const params = useParams();
+  const getSpecificUserResponse = useGetSpecificUserQuery({ _id: params.userId });
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { selectedUserData } = useSelector(
-    (state: RootState) => state.usersInfo
-  );
-  const loadingSpecificUser = useSelector(
-    (state: RootState) => state.loaders.loadingSpecificUser
+  const selectedUserData = useSelector(
+    (state: RootState) => state.usersInfo.selectedUserData
   );
 
   useEffect(() => {
-    if (!selectedUserData) {
-      getSpecificUser({ _id: params.userId });
+    if (getSpecificUserResponse.isSuccess) {
+      if (getSpecificUserResponse.data.status) {
+        dispatch(saveCurrentUserData(getSpecificUserResponse.data.data[0]));
+        dispatch(
+          triggerFlashMessage({
+            message: "Got specific user",
+            messageType: "success",
+            open: true,
+          })
+        );
+      } else {
+        dispatch(
+          triggerFlashMessage({
+            message: "Given user is not found",
+            messageType: "info",
+            open: true,
+          })
+        );
+      }
     }
-  }, [selectedUserData]);
+  }, [getSpecificUserResponse.isSuccess]);
 
-  if (loadingSpecificUser) {
+  if (getSpecificUserResponse.isLoading) {
     return <FullScreenLoader />;
   }
 

@@ -1,21 +1,40 @@
 import { Box } from "@mui/system";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { deleteAllUsers, getUsers } from "../apis/apisList";
+import { getUsers } from "../apis/apisList";
 import { RootState } from "../Redux/store";
 import AddNewUserButton from "./Form/AddNewUserButton";
 import FullScreenLoader from "./FullScreenLoader";
 import UserRecords from "./UserRecords";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
+import { useDeleteAllUsersMutation } from "../apis/usersApi";
+import { savePeopleList } from "../Redux/reducers/usersInfoSlice";
+import { triggerFlashMessage } from "../Redux/reducers/flashMessageSlice";
+import { useDispatch } from "react-redux";
 
 const Users = () => {
   const { userList } = useSelector((state: RootState) => state.usersInfo);
+  const dispatch = useDispatch();
+  const [deleteAllUsers, deleteAllUsersResponse] = useDeleteAllUsersMutation();
   const navigate = useNavigate();
 
   const usersFetchingLoader = useSelector(
     (state: RootState) => state.loaders.usersFetchingLoader
   );
+
+  useEffect(() => {
+    if (deleteAllUsersResponse.isSuccess) {
+      dispatch(savePeopleList([]));
+      dispatch(
+        triggerFlashMessage({
+          message: "All users are deleted successfully",
+          messageType: "success",
+          open: true,
+        })
+      );
+    }
+  }, [deleteAllUsersResponse.isSuccess]);
 
   useEffect(() => {
     if (!userList.length) {
@@ -42,7 +61,7 @@ const Users = () => {
           color="error"
           sx={{ marginLeft: "10px" }}
           variant="contained"
-          onClick={()=>deleteAllUsers({})}
+          onClick={() => deleteAllUsers({})}
         >
           Delete All
         </Button>
