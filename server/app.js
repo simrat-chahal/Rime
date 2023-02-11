@@ -1,10 +1,12 @@
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
+require("dotenv").config();
 const app = express();
-const StudentModel = require("./models/Student");
+const StudentModel = require("./src/models/Student");
 app.use(cors());
 app.use(express.json());
+
 // app.use(
 //   express.urlencoded({
 //     extended: true,
@@ -13,8 +15,8 @@ app.use(express.json());
 
 (async () =>
   await mongoose
-    .connect("mongodb://localhost:27017/myapp")
-    .catch((err) => console.log("catch bloc")))();
+    .connect(process.env.DB_URL)
+    .catch((err) => console.log("catch block")))();
 
 app.get("/users", async (req, res) => {
   try {
@@ -102,7 +104,9 @@ app.delete("/delete-user", async (req, res) => {
 
 app.delete("/delete-all", async (req, res) => {
   try {
-    const result = await StudentModel.deleteMany({ name: { $ne: "630faadc0d3537896ac7863y" } });
+    const result = await StudentModel.deleteMany({
+      name: { $ne: "630faadc0d3537896ac7863y" },
+    });
     if (result.deletedCount === 0) {
       res
         .status(400)
@@ -119,4 +123,4 @@ app.delete("/delete-all", async (req, res) => {
   }
 });
 
-app.listen(5000, () => console.log("server is listening..."));
+app.listen(process.env.PORT, () => console.log("server is listening..."));
