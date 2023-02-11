@@ -1,5 +1,4 @@
 import React from "react";
-
 //mui imports
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
@@ -9,10 +8,8 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import ThreeDotsMenu from "./ThreeDotsMenu";
-
 //redux imports
 import { useSelector } from "react-redux";
-//redux actions
 import { RootState } from "../Redux/store";
 
 interface Column {

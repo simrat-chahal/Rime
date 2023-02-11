@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+//mui imports
 import {
   Button,
   List,
@@ -5,53 +7,33 @@ import {
   ListItemText,
   Typography,
 } from "@mui/material";
+import { Box } from "@mui/material";
+import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
+//redux imports
 import { useSelector } from "react-redux";
 import { RootState } from "../Redux/store";
-import { useEffect } from "react";
+//other imports
+import { getSpecificUser } from "../apis/apisList";
 import FullScreenLoader from "./FullScreenLoader";
 import { useNavigate, useParams } from "react-router-dom";
 
-//mui imports
-import { Box } from "@mui/material";
-import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
-import { useGetSpecificUserQuery } from "../apis/usersApi";
-import { triggerFlashMessage } from "../Redux/reducers/flashMessageSlice";
-import { saveCurrentUserData } from "../Redux/reducers/usersInfoSlice";
-import { useDispatch } from "react-redux";
-
 function UserDetails() {
   const params = useParams();
-  const getSpecificUserResponse = useGetSpecificUserQuery({ _id: params.userId });
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const selectedUserData = useSelector(
-    (state: RootState) => state.usersInfo.selectedUserData
+  const { selectedUserData } = useSelector(
+    (state: RootState) => state.usersInfo
+  );
+  const loadingSpecificUser = useSelector(
+    (state: RootState) => state.loaders.loadingSpecificUser
   );
 
   useEffect(() => {
-    if (getSpecificUserResponse.isSuccess) {
-      if (getSpecificUserResponse.data.status) {
-        dispatch(saveCurrentUserData(getSpecificUserResponse.data.data[0]));
-        dispatch(
-          triggerFlashMessage({
-            message: "Got specific user",
-            messageType: "success",
-            open: true,
-          })
-        );
-      } else {
-        dispatch(
-          triggerFlashMessage({
-            message: "Given user is not found",
-            messageType: "info",
-            open: true,
-          })
-        );
-      }
+    if (!selectedUserData) {
+      getSpecificUser({ _id: params.userId });
     }
-  }, [getSpecificUserResponse.isSuccess]);
+  }, [selectedUserData]);
 
-  if (getSpecificUserResponse.isLoading) {
+  if (loadingSpecificUser) {
     return <FullScreenLoader />;
   }
 

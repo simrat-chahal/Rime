@@ -1,54 +1,30 @@
-import { Box } from "@mui/system";
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { getUsers } from "../apis/apisList";
+//mui imports
+import { Box } from "@mui/system";
+import { Button } from "@mui/material";
+//redux imports
 import { RootState } from "../Redux/store";
+import { useSelector } from "react-redux";
+//other imports
+import NoUsersData from "./NoUsersData";
+import UserRecords from "./UserRecords";
 import AddNewUserButton from "./Form/AddNewUserButton";
 import FullScreenLoader from "./FullScreenLoader";
-import UserRecords from "./UserRecords";
-import { useNavigate } from "react-router-dom";
-import { Button } from "@mui/material";
-import { useDeleteAllUsersMutation } from "../apis/usersApi";
-import { savePeopleList } from "../Redux/reducers/usersInfoSlice";
-import { triggerFlashMessage } from "../Redux/reducers/flashMessageSlice";
-import { useDispatch } from "react-redux";
+import { deleteAllUsers, getUsers } from "../apis/apisList";
 
 const Users = () => {
   const { userList } = useSelector((state: RootState) => state.usersInfo);
-  const dispatch = useDispatch();
-  const [deleteAllUsers, deleteAllUsersResponse] = useDeleteAllUsersMutation();
-  const navigate = useNavigate();
 
   const usersFetchingLoader = useSelector(
     (state: RootState) => state.loaders.usersFetchingLoader
   );
 
   useEffect(() => {
-    if (deleteAllUsersResponse.isSuccess) {
-      dispatch(savePeopleList([]));
-      dispatch(
-        triggerFlashMessage({
-          message: "All users are deleted successfully",
-          messageType: "success",
-          open: true,
-        })
-      );
-    }
-  }, [deleteAllUsersResponse.isSuccess]);
-
-  useEffect(() => {
-    if (!userList.length) {
-      getUsers();
-    }
+    getUsers();
   }, []);
 
-  useEffect(() => {
-    if (!userList.length) {
-      navigate("/");
-    }
-  }, [userList]);
-
   if (usersFetchingLoader) return <FullScreenLoader />;
+  if (!userList.length) return <NoUsersData />;
 
   return (
     <>

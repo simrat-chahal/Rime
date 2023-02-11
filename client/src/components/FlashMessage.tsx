@@ -1,8 +1,11 @@
-import { Alert, Snackbar } from "@mui/material";
 import React from "react";
-import { closeFlashMessage } from "../Redux/reducers/flashMessageSlice";
+//mui imports
+import { Alert, Snackbar } from "@mui/material";
+//redux imports
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../Redux/store";
+//other imports
+import { closeFlashMessage } from "../Redux/reducers/flashMessageSlice";
 
 const FlashMessage = () => {
   const dispatch = useDispatch();

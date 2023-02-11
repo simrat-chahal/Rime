@@ -11,7 +11,7 @@ import {
 } from "../Redux/reducers/usersInfoSlice";
 import { store } from "../Redux/store";
 
-const appUrl = "http://localhost:5000/";
+const appUrl = process.env.REACT_APP_API_BASE_URL;
 
 const getAPI = (apiUrl: string) => {
   return axios

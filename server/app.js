@@ -1,10 +1,12 @@
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
+require("dotenv").config();
 const app = express();
-const StudentModel = require("./models/Student");
+const StudentModel = require("./src/models/Student");
 app.use(cors());
 app.use(express.json());
+
 // app.use(
 //   express.urlencoded({
 //     extended: true,
@@ -13,22 +15,20 @@ app.use(express.json());
 
 (async () =>
   await mongoose
-    .connect("mongodb://localhost:27017/myapp")
+    .connect(process.env.DB_URL)
     .catch((err) => console.log("catch block")))();
 
 app.get("/users", async (req, res) => {
-  setTimeout(async () => {
-    try {
-      const result = await StudentModel.find();
-      if (result.length) {
-        res.status(200).send({ status: true, data: result });
-      } else {
-        res.status(200).send({ status: false, message: "No data is found" });
-      }
-    } catch (error) {
-      res.status(500).send({ status: false, errorInformation: error });
+  try {
+    const result = await StudentModel.find();
+    if (result.length) {
+      res.status(200).send({ status: true, data: result });
+    } else {
+      res.status(200).send({ status: false, message: "No data is found" });
     }
-  }, 3000);
+  } catch (error) {
+    res.status(500).send({ status: false, errorInformation: error });
+  }
 });
 
 app.get("/users/:userId", async (req, res) => {
@@ -123,4 +123,4 @@ app.delete("/delete-all", async (req, res) => {
   }
 });
 
-app.listen(5000, () => console.log("server is listening..."));
+app.listen(process.env.PORT, () => console.log("server is listening..."));

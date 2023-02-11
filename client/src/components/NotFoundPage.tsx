@@ -1,3 +1,4 @@
+//mui imports
 import { Box } from "@mui/system";
 
 const NotFoundPage = () => (
