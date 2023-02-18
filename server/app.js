@@ -3,7 +3,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 require("dotenv").config();
 const app = express();
-const StudentModel = require("./src/models/Student");
+const usersModel = require("./src/models/users");
 app.use(cors());
 app.use(express.json());
 
@@ -20,7 +20,7 @@ app.use(express.json());
 
 app.get("/users", async (req, res) => {
   try {
-    const result = await StudentModel.find();
+    const result = await usersModel.find();
     if (result.length) {
       res.status(200).send({ status: true, data: result });
     } else {
@@ -34,7 +34,7 @@ app.get("/users", async (req, res) => {
 app.get("/users/:userId", async (req, res) => {
   try {
     const payloadData = req.query;
-    const result = await StudentModel.find({ _id: payloadData._id });
+    const result = await usersModel.find({ _id: payloadData._id });
     if (result.length) {
       res.status(200).send({ status: true, data: result[0] });
     } else {
@@ -51,7 +51,7 @@ app.get("/users/:userId", async (req, res) => {
 app.put("/update-user-data", async (req, res) => {
   const payloadData = req.body;
   try {
-    const result = await StudentModel.updateOne(
+    const result = await usersModel.updateOne(
       { _id: payloadData._id },
       payloadData
     );
@@ -73,7 +73,7 @@ app.put("/update-user-data", async (req, res) => {
 
 app.post("/add-user", async (req, res) => {
   try {
-    const result = await StudentModel.insertMany([req.body]);
+    const result = await usersModel.insertMany([req.body]);
     res.status(201).json({
       status: true,
       message: "User added successfully",
@@ -86,7 +86,7 @@ app.post("/add-user", async (req, res) => {
 
 app.delete("/delete-user", async (req, res) => {
   try {
-    const result = await StudentModel.deleteOne({ _id: req.body._id });
+    const result = await usersModel.deleteOne({ _id: req.body._id });
     if (result.deletedCount === 0) {
       res
         .status(400)
@@ -104,7 +104,7 @@ app.delete("/delete-user", async (req, res) => {
 
 app.delete("/delete-all", async (req, res) => {
   try {
-    const result = await StudentModel.deleteMany({
+    const result = await usersModel.deleteMany({
       name: { $ne: "630faadc0d3537896ac7863y" },
     });
     if (result.deletedCount === 0) {
