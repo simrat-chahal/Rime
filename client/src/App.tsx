@@ -25,8 +25,8 @@ const App = () => {
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Main />} />
-              <Route path="users" element={<Users />}></Route>
-              <Route path="users/:userId" element={<UserDetails />} />
+              <Route path="/users" element={<Users />}></Route>
+              <Route path="/users/:userId" element={<UserDetails />} />
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </BrowserRouter>
