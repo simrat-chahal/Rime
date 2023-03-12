@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
+const path = require("path");
 require("dotenv").config();
 const app = express();
 const usersModel = require("./src/models/users");
@@ -13,10 +14,12 @@ app.use(express.json());
 //   })
 // );
 
+console.log(process.env.DB_URL);
+
 (async () =>
   await mongoose
     .connect(process.env.DB_URL)
-    .catch((err) => console.log("catch block")))();
+    .catch((err) => console.log("catch block", err)))();
 
 app.get("/users", async (req, res) => {
   try {
@@ -121,6 +124,12 @@ app.delete("/delete-all", async (req, res) => {
     console.log(error);
     res.status(500).send({ status: false, errorInformation: error.message });
   }
+});
+
+app.use(express.static(path.join(__dirname, "build")));
+
+app.get("/*", function (req, res) {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
 });
 
 app.listen(process.env.PORT, () => console.log("server is listening..."));
