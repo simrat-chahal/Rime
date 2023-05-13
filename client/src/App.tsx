@@ -1,6 +1,6 @@
 import Main from "./components/Main";
 import Users from "./components/Users";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, HashRouter, Route, Routes } from "react-router-dom";
 import NotFoundPage from "./components/NotFoundPage";
 import FlashMessage from "./components/FlashMessage";
 import FormFiller from "./components/Form/FormFiller";
@@ -22,14 +22,14 @@ const App = () => {
     <Provider store={store}>
       <div className="App">
         <ThemeProvider theme={buttonTheme}>
-          <BrowserRouter>
+          <HashRouter>
             <Routes>
               <Route path="/" element={<Main />} />
               <Route path="/users" element={<Users />}></Route>
               <Route path="/users/:userId" element={<UserDetails />} />
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
-          </BrowserRouter>
+          </HashRouter>
           <FlashMessage />
           <FormFiller />
         </ThemeProvider>

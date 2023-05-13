@@ -188,7 +188,7 @@ export const getSpecificUser = async (apiData: object) => {
       })
     );
     if (res.data.status) {
-      store.dispatch(saveCurrentUserData(res.data.data));
+      store.dispatch(saveCurrentUserData(res.data.data[0]));
       store.dispatch(
         triggerFlashMessage({
           message: "Got specific user",
