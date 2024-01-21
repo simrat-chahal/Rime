@@ -7,6 +7,7 @@ const app = express();
 const usersModel = require("./src/models/users");
 app.use(cors());
 app.use(express.json());
+const environment = process.env.NODE_ENV;
 
 // app.use(
 //   express.urlencoded({
@@ -14,12 +15,12 @@ app.use(express.json());
 //   })
 // );
 
-console.log(process.env.DB_URL);
-
 (async () =>
   await mongoose
     .connect(process.env.DB_URL)
-    .catch((err) => console.log("catch block", err)))();
+    .catch(
+      (err) => environment === "development" && console.log("catch block", err)
+    ))();
 
 app.get("/users", async (req, res) => {
   try {
